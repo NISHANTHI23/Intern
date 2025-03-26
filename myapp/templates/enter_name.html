@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Name for {{ team_name }}</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *:before, *:after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    color: white;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    width: 90%;
+    max-width: 900px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h1, h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+th {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+tr:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 0.3s ease;
+}
+
+.input-container, .form-inline {
+    margin-top: 20px;
+}
+
+.input-container input, .form-inline input {
+    width: 40%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container input:focus, .form-inline input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.input-container input::placeholder, .form-inline input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.input-container button, .form-inline button {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: 25%;
+    background: #23a2f6;
+    color: white;
+}
+
+.input-container button:hover, .form-inline button:hover {
+    background: #1a85d6;
+    transform: scale(1.05);
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.submit-all-button, .back-button {
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: none;
+    color: white;
+}
+
+.submit-all-button {
+    background-color: #28a745;
+}
+
+.submit-all-button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.back-button {
+    background: #2ecc71;
+}
+
+.back-button:hover {
+    background: #27ae60;
+    transform: scale(1.05);
+}
+
+.message {
+    color: #ff6b6b;
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .input-container input, .form-inline input {
+        width: 100%;
+    }
+
+    .input-container button, .form-inline button, .submit-all-button, .back-button {
+        width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ team_name }}</h1>
+        
+        <form method="POST" class="input-container">
+            {% csrf_token %}
+            <input type="text" name="team-name" placeholder="Add New Employee" required>
+            <button type="submit">Save</button>
+        </form>
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <h2>Employees:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Employee</th>
+                    <th>Time In</th>
+                    <th>Calendar</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ member.member_name }}</td>
+                        <td>{{ member.latest_time_entry.time_in|date:'Y-m-d H:i'|default:'Not set' }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'update_time' member.id %}" class="form-inline">
+                                {% csrf_token %}
+                                <input type="datetime-local" name="time-in" value="{{ member.latest_time_entry.time_in|date:'Y-m-d\TH:i' }}">
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'delete_member' member.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form method="POST" action="{% url 'view_all_team_data' team_name %}">
+            {% csrf_token %}
+            <button type="submit" class="submit-all-button">Submit All Data</button>
+        </form>
+        <br><br>
+        <a href="{% url 'attendance_record' %}" class="back-button">Back to Team Selection</a>
+
+    </div>
+</body>
+</html>
+
+
+
+
+
